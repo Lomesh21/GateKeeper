@@ -7,6 +7,7 @@ import (
 
 	"github.com/Lomesh21/GateKeeper/internal/auth"
 	"github.com/Lomesh21/GateKeeper/internal/gateway"
+	"github.com/Lomesh21/GateKeeper/internal/middleware"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -50,7 +51,7 @@ func main() {
 	}
 	r.Post("/login", loginHandler)
 
-	r.HandleFunc("/books/*", proxyHandler)
+	r.With(middleware.JWTMiddleware).HandleFunc("/books/*", proxyHandler)
 
 	log.Println("API Gateway running on :8080")
 	http.ListenAndServe(":8080", r)
